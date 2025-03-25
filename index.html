@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Friendora - Home</title>
+    <title>Friendora - Connect, Share, and Grow</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,19 +13,48 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="terms.html">Terms</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="verify.html">Verify Account</a></li>
                 <li id="signupLink"><a href="signup.html">Sign Up</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <p>Friendora is a place to connect with people from around the world. Create your account and start your journey today!</p>
+        <section class="intro">
+            <h2>What is Friendora?</h2>
+            <p>Friendora is the ultimate social networking platform that allows you to connect with people from all around the world. Share your thoughts, post pictures, chat with friends, and engage in meaningful discussions.</p>
+        </section>
+
+        <section class="features">
+            <h2>Why Join Friendora?</h2>
+            <ul>
+                <li>🌍 Connect with millions of users worldwide</li>
+                <li>📸 Share photos, videos, and updates</li>
+                <li>💬 Chat with friends in real time</li>
+                <li>🎭 Join interest-based groups</li>
+                <li>🔒 Safe and secure environment</li>
+            </ul>
+        </section>
+
+        <section class="cta">
+            <h2>Join Today!</h2>
+            <p>Create your account and start your journey today.</p>
+            <a href="signup.html" class="signup-btn">Sign Up Now</a>
+        </section>
     </main>
+
+    <footer>
+        <p>&copy; 2025 Friendora. All rights reserved.</p>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const signupLink = document.getElementById("signupLink");
-
             const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
             if (user) {
@@ -33,9 +62,9 @@
                 const dropdown = document.createElement("ul");
                 dropdown.classList.add("dropdown-menu");
                 dropdown.innerHTML = `
-                    <li><a href="edit-profile.html">Edit Profile</a></li>
-                    <li><a href="view-profile.html">View Profile</a></li>
-                    <li><a href="#" id="logout">Log Out</a></li>
+                    <li><a href="editprofile.html">Edit Profile</a></li>
+                    <li><a href="viewprofile.html">View Profile</a></li>
+                    <li><a href="login.html" id="logout">Log Out</a></li>
                 `;
                 signupLink.appendChild(dropdown);
 
@@ -51,5 +80,6 @@
             }
         });
     </script>
+
 </body>
 </html>
