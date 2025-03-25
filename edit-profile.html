@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Friendora</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Your Profile</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="viewprofile.html">View Profile</a>
+            <a href="login.html" id="logout">Log Out</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2>Update Your Profile</h2>
+            <form id="editProfileForm">
+                <label for="profilePic">Profile Picture URL:</label>
+                <input type="url" id="profilePic">
+
+                <label for="bio">Bio:</label>
+                <textarea id="bio" rows="3"></textarea>
+
+                <label for="interests">Interests:</label>
+                <input type="text" id="interests">
+
+                <label for="gender">Gender:</label>
+                <select id="gender">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="nationality">Nationality:</label>
+                <input type="text" id="nationality">
+
+                <label for="age">Age:</label>
+                <input type="number" id="age" min="13">
+
+                <label for="relationshipStatus">Relationship Status:</label>
+                <select id="relationshipStatus">
+                    <option value="">Select</option>
+                    <option value="Single">Single</option>
+                    <option value="In a Relationship">In a Relationship</option>
+                    <option value="Married">Married</option>
+                    <option value="Complicated">It's Complicated</option>
+                </select>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const user = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!user) {
+                alert("You must be logged in to edit your profile!");
+                window.location.href = "login.html";
+                return;
+            }
+
+            const binId = "67e31daf8960c979a5785a73";
+            const apiKey = "$2a$10$SmONWXPI.LLZyuns2GkB6eXMeygnE7HuBZ/x3O0TfQ3PyEvyqmfwa";
+
+            try {
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                    headers: { "X-Master-Key": apiKey }
+                });
+                const data = await response.json();
+                const users = data.record || [];
+
+                const currentUser = users.find(u => u.username === user.username);
+                if (!currentUser) {
+                    alert("Profile not found!");
+                    window.location.href = "signup.html";
+                    return;
+                }
+
+                document.getElementById("profilePic").value = currentUser.profilePic || "";
+                document.getElementById("bio").value = currentUser.bio || "";
+                document.getElementById("interests").value = currentUser.interests || "";
+                document.getElementById("gender").value = currentUser.gender || "";
+                document.getElementById("nationality").value = currentUser.nationality || "";
+                document.getElementById("age").value = currentUser.age || "";
+                document.getElementById("relationshipStatus").value = currentUser.relationshipStatus || "";
+
+                document.getElementById("editProfileForm").addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    currentUser.profilePic = document.getElementById("profilePic").value;
+                    currentUser.bio = document.getElementById("bio").value;
+                    currentUser.interests = document.getElementById("interests").value;
+                    currentUser.gender = document.getElementById("gender").value;
+                    currentUser.nationality = document.getElementById("nationality").value;
+                    currentUser.age = document.getElementById("age").value;
+                    currentUser.relationshipStatus = document.getElementById("relationshipStatus").value;
+
+                    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Master-Key": apiKey
+                        },
+                        body: JSON.stringify(users)
+                    });
+
+                    localStorage.setItem("loggedInUser", JSON.stringify(currentUser));
+
+                    alert("Profile updated successfully!");
+                    window.location.href = "viewprofile.html";
+                });
+
+            } catch (error) {
+                console.error("Error loading profile:", error);
+                alert("Error loading profile. Please try again!");
+            }
+
+            document.getElementById("logout").addEventListener("click", function () {
+                localStorage.removeItem("loggedInUser");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>
